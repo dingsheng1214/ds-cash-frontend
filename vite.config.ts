@@ -5,6 +5,7 @@ import react from '@vitejs/plugin-react'
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
+    host: true,
     proxy: {
       '/api': {
         // 当遇到 /api 路径时，将其转换成 target 的值
@@ -18,6 +19,16 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, 'src'),
       utils: path.resolve(__dirname, 'src/utils'),
+    },
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        // mixin和variable里面是函数和变量等供scss使用的非实体css, scss-loader需要
+        additionalData: `
+          @import "@/assets/scss/variable.scss";
+        `,
+      },
     },
   },
   plugins: [react()],

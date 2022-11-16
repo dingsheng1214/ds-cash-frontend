@@ -25,6 +25,9 @@ export default function NavBar() {
   const handleTabBarChange = (key: string) => {
     navigate(key)
   }
+  if (location.pathname === '/login') {
+    return null
+  }
   return (
     <TabBar activeKey={location.pathname} onChange={handleTabBarChange}>
       {tabs.map((item) => (

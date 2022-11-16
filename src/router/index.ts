@@ -1,6 +1,7 @@
 import Home from '@/pages/home/'
 import User from '@/pages/user'
 import Data from '@/pages/data'
+import Login from '@/pages/login'
 
 const routes = [
   {
@@ -14,6 +15,10 @@ const routes = [
   {
     path: '/user',
     component: User,
+  },
+  {
+    path: '/login',
+    component: Login,
   },
 ]
 

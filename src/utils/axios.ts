@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {Toast} from 'zarm'
+import {Toast} from 'antd-mobile'
 
 // 环境变量
 const MODE = import.meta.env.MODE
@@ -28,7 +28,7 @@ request.interceptors.response.use((res) => {
     }
     return Promise.reject(res.data)
   }
-  return res.data
+  return res.data.data
 })
 
 export default request

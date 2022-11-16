@@ -1,0 +1,60 @@
+.container {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+  box-sizing: border-box;
+
+  .login-svg {
+    flex: 0;
+  }
+  .tabs {
+    margin-top: 20px;
+    margin-left: 20px;
+    color: #3DB374;
+    .tab {
+      border-bottom: 1px solid #3DB374;
+      font-size: 15px;
+      margin-right: 10px;
+      &.active {
+        font-size: 20px;
+      }
+    }
+  }
+  .login-form {
+    flex: 1;
+    padding: 10px;
+    box-sizing: border-box;
+
+    .password {
+        display: flex;
+        align-items: center;
+
+        .input {
+          flex: auto;
+        }
+
+        .eye {
+          flex: none;
+          margin-left: 8px;
+          padding: 4px;
+          cursor: pointer;
+
+          svg {
+            display: block;
+            font-size: var(--adm-font-size-7);
+          }
+        }
+      }
+    .icon-lable {
+      width: 20px;
+      height: 20px;
+    }
+    .submit-btn {
+      color: #fff;
+      background-color: #3DB374;
+      width: 100%;
+      border-radius: 5px;
+      margin-top: 0px;
+    }
+  }
+}
