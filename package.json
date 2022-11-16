@@ -9,16 +9,22 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "amfe-flexible": "^2.2.1",
+    "postcss-pxtorem": "^6.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.4.3"
+    "react-router-dom": "^6.4.3",
+    "zarm": "^2.9.16"
   },
   "devDependencies": {
     "@types/node": "^18.11.9",
     "@types/react": "^18.0.24",
     "@types/react-dom": "^18.0.8",
     "@vitejs/plugin-react": "^2.2.0",
+    "consola": "^2.15.3",
+    "sass": "^1.56.1",
     "typescript": "^4.6.4",
-    "vite": "^3.2.3"
+    "vite": "^3.2.3",
+    "vite-plugin-style-import": "^2.0.0"
   }
 }
