@@ -1,5 +1,6 @@
-import About from '@/pages/about'
-import Home from '@/pages/home/index'
+import Home from '@/pages/home/'
+import User from '@/pages/user'
+import Data from '@/pages/data'
 
 const routes = [
   {
@@ -7,8 +8,12 @@ const routes = [
     component: Home,
   },
   {
-    path: '/about',
-    component: About,
+    path: '/data',
+    component: Data,
+  },
+  {
+    path: '/user',
+    component: User,
   },
 ]
 
