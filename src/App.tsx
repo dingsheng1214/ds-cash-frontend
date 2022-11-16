@@ -1,12 +1,22 @@
-import {RouterProvider} from 'react-router-dom'
-import './App.css'
-import router from './router'
+import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import {ConfigProvider} from 'zarm'
+import routes from '@/router'
+import './App.css'
 
 function App() {
   return (
     <ConfigProvider>
-      <RouterProvider router={router} />
+      <BrowserRouter>
+        <Routes>
+          {routes.map((route) => (
+            <Route
+              key={route.path}
+              path={route.path}
+              element={<route.component />}
+            />
+          ))}
+        </Routes>
+      </BrowserRouter>
     </ConfigProvider>
   )
 }

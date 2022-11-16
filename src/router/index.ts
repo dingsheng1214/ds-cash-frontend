@@ -1,16 +1,15 @@
-import Home from '@/pages/home'
 import About from '@/pages/about'
-import {createBrowserRouter, RouteObject} from 'react-router-dom'
-const routes: RouteObject[] = [
+import Home from '@/pages/home/index'
+
+const routes = [
   {
     path: '/',
-    element: Home(),
+    component: Home,
   },
   {
     path: '/about',
-    element: About(),
+    component: About,
   },
 ]
 
-const router = createBrowserRouter(routes)
-export default router
+export default routes
