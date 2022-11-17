@@ -1,0 +1,27 @@
+.bill {
+  display: flex;
+  padding: 10px 20px;
+  box-sizing: border-box;
+
+  .right {
+    margin-left: 10px;
+    flex-basis: 80%;
+    flex-grow: 1;
+    font-size: 16px;
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .bottom {
+      color: #B3B3B3;
+
+      .time {
+        margin-right: 10px;
+      }
+    }
+  }
+}

@@ -12,9 +12,13 @@
 
 .body {
   flex: 1;
+  flex-basis: calc(100vh - 50px);
 }
 
 .bottom {
-  flex: 0;
   border-top: solid 1px var(--adm-color-border);
+  background-color: #fff;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }

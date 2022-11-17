@@ -28,7 +28,7 @@ request.interceptors.response.use((res) => {
     }
     return Promise.reject(res.data)
   }
-  return res.data.data
+  return res.data
 })
 
 export default request
