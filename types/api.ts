@@ -17,7 +17,6 @@ export interface pageInfo {
 export interface ListBillDto {
   type?: 1 | 2
   tag_id?: string
-  user_id: string
   date: string
   pageInfo: pageInfo
 }
@@ -31,9 +30,9 @@ export interface ListBillBo {
 
 export interface Tag {
   id: string
-  type: 1 | 2
-  name: string
-  user_id: string
+  type?: 1 | 2
+  name?: string
+  user_id?: string
 }
 export interface ListTagDto {
   type?: 1 | 2

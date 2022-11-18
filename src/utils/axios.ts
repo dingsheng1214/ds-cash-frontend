@@ -21,8 +21,6 @@ request.interceptors.request.use((config) => {
 })
 // 响应拦截
 request.interceptors.response.use((res) => {
-  console.log('axios', res)
-
   if (typeof res.data !== 'object') {
     Toast.show('服务端异常！')
     return Promise.reject(res)

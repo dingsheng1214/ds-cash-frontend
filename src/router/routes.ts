@@ -16,7 +16,7 @@ const routes = [
     path: '/data',
     component: Data,
     meta: {
-      title: '账单',
+      title: '统计',
       needLogin: true,
     },
   },
@@ -24,7 +24,7 @@ const routes = [
     path: '/user',
     component: User,
     meta: {
-      title: '账单',
+      title: '我的',
       needLogin: true,
     },
   },

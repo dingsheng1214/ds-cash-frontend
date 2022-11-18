@@ -1,6 +1,8 @@
+import {ListBillDto, Tag} from '#/api'
 import {OneDayBills} from '#/global'
 import {fetchBillList} from '@/api/bill'
-import {InfiniteScroll, PullToRefresh, Toast} from 'antd-mobile'
+import {Divider, InfiniteScroll, PullToRefresh, Toast} from 'antd-mobile'
+import {AppstoreOutline} from 'antd-mobile-icons'
 import dayjs from 'dayjs'
 import {ForwardedRef, useEffect, useRef, useState} from 'react'
 import BillItem from './BillItem'
@@ -10,22 +12,25 @@ import TagPopup, {TagPopupExpose} from './TagPopup'
 export default function Home() {
   const [expense, setExpense] = useState(0) // 总支出
   const [income, setIncome] = useState(0) // 总收入
-  const [date, setDate] = useState(dayjs().format('YYYY-MM')) // 当前筛选时间
-  const [page, setPage] = useState(1) // 分页
   const [oneDayBills, setOneDayBills] = useState<OneDayBills[]>([]) // 账单列表
   const [totalPage, setTotalPage] = useState(0) // 分页总数
   const tagPopupRef = useRef<TagPopupExpose>()
+
+  const [currentSelect, setCurrentSelect] = useState<Tag>({id: 'all'}) // 当前筛选类型
+  const [date, setDate] = useState(dayjs().format('YYYY-MM')) // 当前筛选时间
+  const [page, setPage] = useState(1) // 分页
+
   /**
    * 获取账单列表
    */
   const getBillList = async () => {
+    const params: ListBillDto = {date, pageInfo: {page, page_size: 2}}
+    if (currentSelect.id !== 'all') {
+      params.tag_id = currentSelect.id
+    }
     const {
       data: {list, total_page, total_expense, total_income},
-    } = await fetchBillList({
-      date,
-      user_id: 'a64dbe53-c7ba-49a0-982f-b7d4bd00085a',
-      pageInfo: {page, page_size: 2},
-    })
+    } = await fetchBillList(params)
     if (page === 1) {
       setOneDayBills(list)
     } else {
@@ -55,41 +60,55 @@ export default function Home() {
   }
 
   /**
-   * 首次请求
+   * 请求
    */
   useEffect(() => {
-    ;(async () => {
-      const loadingToast = Toast.show({
-        icon: 'loading',
-        content: '加载中...',
-        duration: 0,
-      })
-      await getBillList()
-      loadingToast.close()
-    })()
-  }, [])
+    getBillList()
+  }, [page, currentSelect])
+
+  // 筛选类型
+  const select = (item: Tag) => {
+    setPage(1)
+    setCurrentSelect(item)
+  }
 
   const handleTagSelect = () => {
     tagPopupRef.current!.show()
   }
-
   return (
     <div className={s.home}>
       <div className={s.header}>
-        <div className={s.summary}>
-          <div className={s.expense}>
-            总支出:<b>¥ {expense}</b>
-          </div>
-          <div className={s.income}>
-            总入账:<b>¥ {income}</b>
-          </div>
+        <div className={s.top} onClick={handleTagSelect}>
+          <span className={s['tag-name']}>
+            {currentSelect.id === 'all' ? '全部类型' : currentSelect.name}
+          </span>
+          <Divider direction='vertical' />
+          <AppstoreOutline />
         </div>
-        <div className={s.filter}>
-          <div className={s.left} onClick={handleTagSelect}>
-            <span className={s.title}>类型</span>
+
+        <div className={s.bottom}>
+          <div className={s.left}>
+            <span className={s.time}>{date}</span>
           </div>
           <div className={s.right}>
-            <span className={s.time}>{date}</span>
+            {currentSelect.id === 'all' ? (
+              <>
+                <div className={s.expense}>
+                  总支出:<b>¥ {expense}</b>
+                </div>
+                <div className={s.income}>
+                  总入账:<b>¥ {income}</b>
+                </div>
+              </>
+            ) : currentSelect.type === 1 ? (
+              <div className={s.expense}>
+                {currentSelect.name}总支出:<b>¥ {expense}</b>
+              </div>
+            ) : (
+              <div className={s.income}>
+                {currentSelect.name}总入账:<b>¥ {income}</b>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -103,7 +122,10 @@ export default function Home() {
         </PullToRefresh>
       </div>
 
-      <TagPopup ref={tagPopupRef as ForwardedRef<TagPopupExpose>} />
+      <TagPopup
+        ref={tagPopupRef as ForwardedRef<TagPopupExpose>}
+        onSelect={select}
+      />
     </div>
   )
 }
