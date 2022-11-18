@@ -1,7 +1,9 @@
-import Home from '@/pages/home/'
-import User from '@/pages/user'
-import Data from '@/pages/data'
-import Login from '@/pages/login'
+import {lazy} from 'react'
+
+const Home = lazy(() => import('@/pages/home'))
+const Data = lazy(() => import('@/pages/data'))
+const User = lazy(() => import('@/pages/user'))
+const Login = lazy(() => import('@/pages/login'))
 
 const routes = [
   {

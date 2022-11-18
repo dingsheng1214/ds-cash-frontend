@@ -6,7 +6,7 @@ const whiteList = ['/login']
 export default function RouterBeforeEach(props: {
   route: {
     path: string
-    component: () => JSX.Element
+    component: React.LazyExoticComponent<() => JSX.Element>
     meta: Record<string, unknown>
   }
   children: ReactNode

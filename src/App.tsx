@@ -2,7 +2,7 @@ import {Route, Routes, useLocation} from 'react-router-dom'
 import {routes, RouteBeforeEach} from '@/router'
 import NavBar from './components/navbar'
 import './App.scss'
-import {useEffect, useState} from 'react'
+import {Suspense, useEffect, useState} from 'react'
 
 function App() {
   const {pathname} = useLocation()
@@ -15,29 +15,31 @@ function App() {
   }, [pathname])
 
   return (
-    <div className='app'>
-      <div className='body'>
-        <Routes>
-          {routes.map((route) => {
-            return (
-              <Route
-                key={route.path}
-                path={route.path}
-                element={
-                  <RouteBeforeEach route={route}>
-                    <route.component />
-                  </RouteBeforeEach>
-                }
-              />
-            )
-          })}
-        </Routes>
-      </div>
+    <Suspense>
+      <div className='app'>
+        <div className='body'>
+          <Routes>
+            {routes.map((route) => {
+              return (
+                <Route
+                  key={route.path}
+                  path={route.path}
+                  element={
+                    <RouteBeforeEach route={route}>
+                      <route.component />
+                    </RouteBeforeEach>
+                  }
+                />
+              )
+            })}
+          </Routes>
+        </div>
 
-      <div className='bottom'>
-        <NavBar showNav={showNav} />
+        <div className='bottom'>
+          <NavBar showNav={showNav} />
+        </div>
       </div>
-    </div>
+    </Suspense>
   )
 }
 
