@@ -46,4 +46,27 @@
     padding: 8px;
     overflow-y: scroll;
   }
+
+
+  .add {
+    position: fixed;
+    font-size: 14px;
+    font-weight: bold;
+    bottom: 100px;
+    right: 30px;
+    z-index: 1000;
+    border-radius: 50px;
+    padding: 10px;
+    box-shadow: 0 0 10px 0 rgb(0 0 0 / 20%);
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1PX solid #e9e9e9;
+    color: $color-theme;
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
 }

@@ -2,7 +2,9 @@ import {Route, Routes, useLocation} from 'react-router-dom'
 import {routes, RouteBeforeEach} from '@/router'
 import NavBar from './components/navbar'
 import './App.scss'
-import {Suspense, useEffect, useState} from 'react'
+import {useEffect, useState} from 'react'
+import {ConfigProvider} from 'antd-mobile'
+import zhCN from 'antd-mobile/es/locales/zh-CN'
 
 function App() {
   const {pathname} = useLocation()
@@ -15,7 +17,7 @@ function App() {
   }, [pathname])
 
   return (
-    <Suspense>
+    <ConfigProvider locale={zhCN}>
       <div className='app'>
         <div className='body'>
           <Routes>
@@ -39,7 +41,7 @@ function App() {
           <NavBar showNav={showNav} />
         </div>
       </div>
-    </Suspense>
+    </ConfigProvider>
   )
 }
 

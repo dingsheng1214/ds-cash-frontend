@@ -1,6 +1,7 @@
 import {ListBillDto, Tag} from '#/api'
 import {OneDayBills} from '#/global'
 import {fetchBillList} from '@/api/bill'
+import SvgIcon from '@/components/svgIcon'
 import {
   Divider,
   DotLoading,
@@ -51,7 +52,7 @@ export default function Home() {
     let loadingToast: ToastHandler | undefined
     const params: ListBillDto = {
       date,
-      pageInfo: {page, page_size: 2},
+      pageInfo: {page, page_size: 10},
     }
     if (currentSelect.id !== 'all') {
       params.tag_id = currentSelect.id
@@ -93,8 +94,9 @@ export default function Home() {
    * 上拉加载更多
    */
   const loadMore = async () => {
-    console.log('loadMore')
-    setPage(page + 1)
+    if (page < totalPage) {
+      setPage(page + 1)
+    }
   }
 
   /**
@@ -168,7 +170,7 @@ export default function Home() {
             {oneDayBills.map((item, index) => (
               <BillItem oneDayBills={item} key={index} />
             ))}
-            <InfiniteScroll loadMore={loadMore} hasMore={page <= totalPage} />
+            <InfiniteScroll loadMore={loadMore} hasMore={page < totalPage} />
           </PullToRefresh>
         ) : (
           <Empty description='暂无数据' />
@@ -184,6 +186,11 @@ export default function Home() {
         ref={datePopupRef as ForwardedRef<DatePopupExpose>}
         onSelect={onDateSelect}
       />
+
+      <div className={s.add} onClick={() => {}}>
+        <SvgIcon icon='tianjia' />
+        <span>记一笔</span>
+      </div>
     </div>
   )
 }
