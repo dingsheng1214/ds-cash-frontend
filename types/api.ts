@@ -28,3 +28,14 @@ export interface ListBillBo {
   total_page: number
   list: OneDayBills[]
 }
+
+export interface Tag {
+  id: string
+  type: 1 | 2
+  name: string
+  user_id: string
+}
+export interface ListTagDto {
+  type?: 1 | 2
+}
+export type ListTagBo = Tag[]

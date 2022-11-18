@@ -2,9 +2,10 @@ import {OneDayBills} from '#/global'
 import {fetchBillList} from '@/api/bill'
 import {InfiniteScroll, PullToRefresh, Toast} from 'antd-mobile'
 import dayjs from 'dayjs'
-import {useEffect, useState} from 'react'
+import {ForwardedRef, useEffect, useRef, useState} from 'react'
 import BillItem from './BillItem'
 import s from './home.module.scss'
+import TagPopup, {TagPopupExpose} from './TagPopup'
 
 export default function Home() {
   const [expense, setExpense] = useState(0) // 总支出
@@ -13,7 +14,7 @@ export default function Home() {
   const [page, setPage] = useState(1) // 分页
   const [oneDayBills, setOneDayBills] = useState<OneDayBills[]>([]) // 账单列表
   const [totalPage, setTotalPage] = useState(0) // 分页总数
-
+  const tagPopupRef = useRef<TagPopupExpose>()
   /**
    * 获取账单列表
    */
@@ -68,19 +69,23 @@ export default function Home() {
     })()
   }, [])
 
+  const handleTagSelect = () => {
+    tagPopupRef.current!.show()
+  }
+
   return (
     <div className={s.home}>
       <div className={s.header}>
         <div className={s.summary}>
           <div className={s.expense}>
-            总支出:<b>¥ 200</b>
+            总支出:<b>¥ {expense}</b>
           </div>
           <div className={s.income}>
-            总入账:<b>¥ 500</b>
+            总入账:<b>¥ {income}</b>
           </div>
         </div>
         <div className={s.filter}>
-          <div className={s.left}>
+          <div className={s.left} onClick={handleTagSelect}>
             <span className={s.title}>类型</span>
           </div>
           <div className={s.right}>
@@ -97,6 +102,8 @@ export default function Home() {
           <InfiniteScroll loadMore={loadMore} hasMore={page <= totalPage} />
         </PullToRefresh>
       </div>
+
+      <TagPopup ref={tagPopupRef as ForwardedRef<TagPopupExpose>} />
     </div>
   )
 }

@@ -59,6 +59,7 @@ export default function Login() {
       setType('login')
     }
   }
+
   return (
     <div className={style.container}>
       <div className={style['login-svg']}>

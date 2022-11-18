@@ -1,7 +1,7 @@
 import {TabBar} from 'antd-mobile'
 import {useLocation, useNavigate} from 'react-router-dom'
 import {AppOutline, PieOutline, UserOutline} from 'antd-mobile-icons'
-export default function NavBar() {
+export default function NavBar({showNav}: {showNav: boolean}) {
   const tabs = [
     {
       key: '/',
@@ -25,7 +25,7 @@ export default function NavBar() {
   const handleTabBarChange = (key: string) => {
     navigate(key)
   }
-  if (location.pathname === '/login') {
+  if (!showNav) {
     return null
   }
   return (
