@@ -1,13 +1,34 @@
 import {ListBillDto, Tag} from '#/api'
 import {OneDayBills} from '#/global'
 import {fetchBillList} from '@/api/bill'
-import {Divider, InfiniteScroll, PullToRefresh, Toast} from 'antd-mobile'
+import {
+  Divider,
+  DotLoading,
+  Empty,
+  InfiniteScroll,
+  PullToRefresh,
+  Toast,
+} from 'antd-mobile'
 import {AppstoreOutline} from 'antd-mobile-icons'
+import {PullStatus} from 'antd-mobile/es/components/pull-to-refresh'
+import {ToastHandler} from 'antd-mobile/es/components/toast'
 import dayjs from 'dayjs'
-import {ForwardedRef, useEffect, useRef, useState} from 'react'
+import {ForwardedRef, ReactNode, useEffect, useRef, useState} from 'react'
 import BillItem from './BillItem'
 import s from './home.module.scss'
 import TagPopup, {TagPopupExpose} from './TagPopup'
+
+const statusRecord: Record<PullStatus, string | ReactNode> = {
+  pulling: '用力拉',
+  canRelease: '松开吧',
+  refreshing: (
+    <div>
+      玩命加载中
+      <DotLoading />
+    </div>
+  ),
+  complete: '好啦',
+}
 
 export default function Home() {
   const [expense, setExpense] = useState(0) // 总支出
@@ -24,13 +45,22 @@ export default function Home() {
    * 获取账单列表
    */
   const getBillList = async () => {
+    let loadingToast: ToastHandler | undefined
     const params: ListBillDto = {date, pageInfo: {page, page_size: 2}}
     if (currentSelect.id !== 'all') {
       params.tag_id = currentSelect.id
     }
+    if (page === 1) {
+      loadingToast = Toast.show({
+        icon: 'loading',
+        content: '加载中…',
+        duration: 0,
+      })
+    }
     const {
       data: {list, total_page, total_expense, total_income},
     } = await fetchBillList(params)
+    if (loadingToast) loadingToast.close()
     if (page === 1) {
       setOneDayBills(list)
     } else {
@@ -46,8 +76,11 @@ export default function Home() {
    */
   const refresh = async () => {
     console.log('refresh')
-    setPage(1)
-    await getBillList()
+    if (page !== 1) {
+      setPage(1)
+    } else {
+      getBillList()
+    }
   }
 
   /**
@@ -56,7 +89,6 @@ export default function Home() {
   const loadMore = async () => {
     console.log('loadMore')
     setPage(page + 1)
-    await getBillList()
   }
 
   /**
@@ -114,12 +146,21 @@ export default function Home() {
       </div>
 
       <div className={s.list}>
-        <PullToRefresh onRefresh={refresh}>
-          {oneDayBills.map((item, index) => (
-            <BillItem oneDayBills={item} key={index} />
-          ))}
-          <InfiniteScroll loadMore={loadMore} hasMore={page <= totalPage} />
-        </PullToRefresh>
+        {oneDayBills.length ? (
+          <PullToRefresh
+            onRefresh={refresh}
+            renderText={(status) => {
+              return <div>{statusRecord[status]}</div>
+            }}
+          >
+            {oneDayBills.map((item, index) => (
+              <BillItem oneDayBills={item} key={index} />
+            ))}
+            <InfiniteScroll loadMore={loadMore} hasMore={page <= totalPage} />
+          </PullToRefresh>
+        ) : (
+          <Empty description='暂无数据' />
+        )}
       </div>
 
       <TagPopup
