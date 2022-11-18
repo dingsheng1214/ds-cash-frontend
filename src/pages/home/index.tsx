@@ -9,12 +9,13 @@ import {
   PullToRefresh,
   Toast,
 } from 'antd-mobile'
-import {AppstoreOutline} from 'antd-mobile-icons'
+import {AppstoreOutline, DownFill} from 'antd-mobile-icons'
 import {PullStatus} from 'antd-mobile/es/components/pull-to-refresh'
 import {ToastHandler} from 'antd-mobile/es/components/toast'
 import dayjs from 'dayjs'
 import {ForwardedRef, ReactNode, useEffect, useRef, useState} from 'react'
 import BillItem from './BillItem'
+import DatePopup, {DatePopupExpose} from './DatePopup'
 import s from './home.module.scss'
 import TagPopup, {TagPopupExpose} from './TagPopup'
 
@@ -30,15 +31,17 @@ const statusRecord: Record<PullStatus, string | ReactNode> = {
   complete: '好啦',
 }
 
+const dateFormate = 'YYYY-MM'
 export default function Home() {
   const [expense, setExpense] = useState(0) // 总支出
   const [income, setIncome] = useState(0) // 总收入
   const [oneDayBills, setOneDayBills] = useState<OneDayBills[]>([]) // 账单列表
   const [totalPage, setTotalPage] = useState(0) // 分页总数
   const tagPopupRef = useRef<TagPopupExpose>()
+  const datePopupRef = useRef<DatePopupExpose>()
 
   const [currentSelect, setCurrentSelect] = useState<Tag>({id: 'all'}) // 当前筛选类型
-  const [date, setDate] = useState(dayjs().format('YYYY-MM')) // 当前筛选时间
+  const [date, setDate] = useState(dayjs().format(dateFormate)) // 当前筛选时间
   const [page, setPage] = useState(1) // 分页
 
   /**
@@ -46,7 +49,10 @@ export default function Home() {
    */
   const getBillList = async () => {
     let loadingToast: ToastHandler | undefined
-    const params: ListBillDto = {date, pageInfo: {page, page_size: 2}}
+    const params: ListBillDto = {
+      date,
+      pageInfo: {page, page_size: 2},
+    }
     if (currentSelect.id !== 'all') {
       params.tag_id = currentSelect.id
     }
@@ -96,21 +102,24 @@ export default function Home() {
    */
   useEffect(() => {
     getBillList()
-  }, [page, currentSelect])
+  }, [page, currentSelect, date])
 
   // 筛选类型
-  const select = (item: Tag) => {
+  const onTagSelect = (item: Tag) => {
     setPage(1)
     setCurrentSelect(item)
   }
 
-  const handleTagSelect = () => {
-    tagPopupRef.current!.show()
+  // 筛选时间
+  const onDateSelect = (date: Date) => {
+    setPage(1)
+    setDate(dayjs(date).format(dateFormate))
   }
+
   return (
     <div className={s.home}>
       <div className={s.header}>
-        <div className={s.top} onClick={handleTagSelect}>
+        <div className={s.top} onClick={() => tagPopupRef.current?.show()}>
           <span className={s['tag-name']}>
             {currentSelect.id === 'all' ? '全部类型' : currentSelect.name}
           </span>
@@ -119,17 +128,20 @@ export default function Home() {
         </div>
 
         <div className={s.bottom}>
-          <div className={s.left}>
-            <span className={s.time}>{date}</span>
+          <div className={s.left} onClick={() => datePopupRef.current?.show()}>
+            <span className={s.time}>
+              {dayjs(new Date(date)).format('YYYY年MM月')}
+            </span>
+            <DownFill fontSize={10} color='#90d4ac' />
           </div>
           <div className={s.right}>
             {currentSelect.id === 'all' ? (
               <>
                 <div className={s.expense}>
-                  总支出:<b>¥ {expense}</b>
+                  总支出<b>¥ {Number(expense).toFixed(2)}</b>
                 </div>
                 <div className={s.income}>
-                  总入账:<b>¥ {income}</b>
+                  总入账<b>¥ {Number(income).toFixed(2)}</b>
                 </div>
               </>
             ) : currentSelect.type === 1 ? (
@@ -165,7 +177,12 @@ export default function Home() {
 
       <TagPopup
         ref={tagPopupRef as ForwardedRef<TagPopupExpose>}
-        onSelect={select}
+        onSelect={onTagSelect}
+      />
+
+      <DatePopup
+        ref={datePopupRef as ForwardedRef<DatePopupExpose>}
+        onSelect={onDateSelect}
       />
     </div>
   )
