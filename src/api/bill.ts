@@ -8,3 +8,7 @@ export function fetchBillList(data: ListBillDto) {
 export function createBill(data: CreateBillDto) {
   return request.post('/bill/create', data)
 }
+
+export function deleteBill(id: string) {
+  return request.delete(`/bill/${id}`)
+}

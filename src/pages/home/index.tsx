@@ -14,7 +14,14 @@ import {AppstoreOutline, DownFill} from 'antd-mobile-icons'
 import {PullStatus} from 'antd-mobile/es/components/pull-to-refresh'
 import {ToastHandler} from 'antd-mobile/es/components/toast'
 import dayjs from 'dayjs'
-import {ForwardedRef, ReactNode, useEffect, useRef, useState} from 'react'
+import {
+  ForwardedRef,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+  createContext,
+} from 'react'
 import AddBillPopup, {AddBillPopupExpose} from './AddBillPopup'
 import BillItem from './BillItem'
 import DatePopup, {DatePopupExpose} from './DatePopup'
@@ -34,6 +41,9 @@ const statusRecord: Record<PullStatus, string | ReactNode> = {
 }
 
 const dateFormate = 'YYYY-MM'
+export const HomeContext = createContext({
+  refresh() {},
+})
 export default function Home() {
   const [expense, setExpense] = useState(0) // 总支出
   const [income, setIncome] = useState(0) // 总收入
@@ -43,7 +53,6 @@ export default function Home() {
   const tagPopupRef = useRef<TagPopupExpose>()
   const datePopupRef = useRef<DatePopupExpose>()
   const addBillPopupRef = useRef<AddBillPopupExpose>()
-  const [addBillPopupShow, setAddBillPopupShow] = useState(false)
 
   const [currentSelect, setCurrentSelect] = useState<Tag>({id: 'all'}) // 当前筛选类型
   const [date, setDate] = useState(dayjs().format(dateFormate)) // 当前筛选时间
@@ -71,7 +80,7 @@ export default function Home() {
     const {
       data: {list, total_page, total_expense, total_income},
     } = await fetchBillList(params)
-    if (loadingToast) loadingToast.close()
+    loadingToast!.close()
     if (page === 1) {
       setOneDayBills(list)
     } else {
@@ -171,9 +180,11 @@ export default function Home() {
               return <div>{statusRecord[status]}</div>
             }}
           >
-            {oneDayBills.map((item, index) => (
-              <BillItem oneDayBills={item} key={index} />
-            ))}
+            <HomeContext.Provider value={{refresh}}>
+              {oneDayBills.map((item, index) => (
+                <BillItem oneDayBills={item} key={index} />
+              ))}
+            </HomeContext.Provider>
             <InfiniteScroll loadMore={loadMore} hasMore={page < totalPage} />
           </PullToRefresh>
         ) : (
@@ -199,7 +210,6 @@ export default function Home() {
       <div
         className={s.add}
         onClick={() => {
-          setAddBillPopupShow(true)
           addBillPopupRef.current?.show()
         }}
       >
