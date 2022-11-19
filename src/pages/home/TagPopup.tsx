@@ -1,16 +1,10 @@
 import {Tag} from '#/api'
-import {fetchTagList} from '@/api/tag'
 import {Popup} from 'antd-mobile'
 import cx from 'classnames'
 import s from './TagPopup.module.scss'
 import {CloseOutline} from 'antd-mobile-icons'
-import {
-  useState,
-  forwardRef,
-  MutableRefObject,
-  ForwardedRef,
-  useEffect,
-} from 'react'
+import {useState, forwardRef, MutableRefObject, ForwardedRef} from 'react'
+import useTag from './useTag'
 
 export type TagPopupExpose = {
   show: () => void
@@ -22,17 +16,8 @@ interface Props {
 const TagPopup = forwardRef(
   ({onSelect}: Props, ref: ForwardedRef<TagPopupExpose>) => {
     const [show, setShow] = useState(false) // 控制显示隐藏
-    const [expense, setExpense] = useState<Tag[]>([]) // 支出类型标签
-    const [income, setIncome] = useState<Tag[]>([]) // 收入类型标签
     const [active, setActive] = useState('all')
-
-    useEffect(() => {
-      ;(async () => {
-        const {data} = await fetchTagList()
-        setExpense(data.filter((i) => i.type === 1))
-        setIncome(data.filter((i) => i.type === 2))
-      })()
-    }, [])
+    const {expense, income} = useTag(show)
 
     const choseType = (item: Tag | {id: 'all'}) => {
       setActive(item.id)
@@ -49,12 +34,19 @@ const TagPopup = forwardRef(
       }
     }
     return (
-      <Popup visible={show} onMaskClick={() => setShow(false)}>
+      <Popup
+        visible={show}
+        onMaskClick={() => setShow(false)}
+        bodyStyle={{
+          borderTopLeftRadius: '8px',
+          borderTopRightRadius: '8px',
+        }}
+      >
         <div className={s.container}>
           <div className={s.header}>
             请选择类型
             <div className={s.cross} onClick={() => setShow(false)}>
-              <CloseOutline />
+              <CloseOutline fontSize={20} />
             </div>
           </div>
           <div className={s.content}>

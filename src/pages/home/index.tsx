@@ -15,6 +15,7 @@ import {PullStatus} from 'antd-mobile/es/components/pull-to-refresh'
 import {ToastHandler} from 'antd-mobile/es/components/toast'
 import dayjs from 'dayjs'
 import {ForwardedRef, ReactNode, useEffect, useRef, useState} from 'react'
+import AddBillPopup, {AddBillPopupExpose} from './AddBillPopup'
 import BillItem from './BillItem'
 import DatePopup, {DatePopupExpose} from './DatePopup'
 import s from './home.module.scss'
@@ -38,8 +39,11 @@ export default function Home() {
   const [income, setIncome] = useState(0) // 总收入
   const [oneDayBills, setOneDayBills] = useState<OneDayBills[]>([]) // 账单列表
   const [totalPage, setTotalPage] = useState(0) // 分页总数
+
   const tagPopupRef = useRef<TagPopupExpose>()
   const datePopupRef = useRef<DatePopupExpose>()
+  const addBillPopupRef = useRef<AddBillPopupExpose>()
+  const [addBillPopupShow, setAddBillPopupShow] = useState(false)
 
   const [currentSelect, setCurrentSelect] = useState<Tag>({id: 'all'}) // 当前筛选类型
   const [date, setDate] = useState(dayjs().format(dateFormate)) // 当前筛选时间
@@ -187,7 +191,18 @@ export default function Home() {
         onSelect={onDateSelect}
       />
 
-      <div className={s.add} onClick={() => {}}>
+      <AddBillPopup
+        ref={addBillPopupRef as ForwardedRef<AddBillPopupExpose>}
+        refresh={refresh}
+      />
+
+      <div
+        className={s.add}
+        onClick={() => {
+          setAddBillPopupShow(true)
+          addBillPopupRef.current?.show()
+        }}
+      >
         <SvgIcon icon='tianjia' />
         <span>记一笔</span>
       </div>

@@ -1,4 +1,4 @@
-import {SwipeAction} from 'antd-mobile'
+import {Divider, SwipeAction} from 'antd-mobile'
 import {Action} from 'antd-mobile/es/components/swipe-action'
 import {Bill as BillType} from '#/global'
 import SvgIcon from '@/components/svgIcon'
@@ -40,10 +40,16 @@ export default function Bill({bill}: {bill: BillType}) {
             <span className={s.time}>
               {dayjs(bill.updated_time).format('hh:ss')}
             </span>
-            <span>{bill.remark}</span>
+            {bill.remark ? (
+              <>
+                <Divider direction='vertical' />
+                <span>{bill.remark}</span>
+              </>
+            ) : null}
           </div>
         </div>
       </div>
+      <div className={s.divider}></div>
     </SwipeAction>
   )
 }

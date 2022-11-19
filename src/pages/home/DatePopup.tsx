@@ -8,6 +8,7 @@ export type DatePopupExpose = {
 }
 interface Props {
   onSelect: (selected: Date) => void
+  precision?: Precision
 }
 
 const renderLabel = (type: Precision, data: number) => {
@@ -16,12 +17,17 @@ const renderLabel = (type: Precision, data: number) => {
       return data + '年'
     case 'month':
       return data + '月'
+    case 'day':
+      return data + '日'
     default:
       return data
   }
 }
 const DatePopup = forwardRef(
-  ({onSelect}: Props, ref: ForwardedRef<DatePopupExpose>) => {
+  (
+    {onSelect, precision = 'month'}: Props,
+    ref: ForwardedRef<DatePopupExpose>
+  ) => {
     const [show, setShow] = useState(false) // 控制显示隐藏
     const [date, setDate] = useState<Date>(new Date())
 
@@ -38,14 +44,15 @@ const DatePopup = forwardRef(
         title='请选择'
         value={date}
         visible={show}
-        precision='month'
+        precision={precision}
         renderLabel={renderLabel}
-        onSelect={(val) => setDate(val)}
         onConfirm={(date) => {
           setShow(false)
           onSelect(date)
         }}
-        onClose={() => setShow(false)}
+        onClose={() => {
+          setShow(false)
+        }}
       />
     )
   }

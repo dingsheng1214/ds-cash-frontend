@@ -33,8 +33,18 @@ export interface Tag {
   type?: 1 | 2
   name?: string
   user_id?: string
+  icon?: string | undefined
 }
 export interface ListTagDto {
   type?: 1 | 2
 }
 export type ListTagBo = Tag[]
+
+export interface CreateBillDto {
+  type: 1 | 2
+  amount: number
+  tag_id: string
+  tag_name: string
+  date: string
+  remark?: string
+}
