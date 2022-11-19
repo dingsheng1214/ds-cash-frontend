@@ -5,8 +5,9 @@ import SvgIcon from '@/components/svgIcon'
 import dayjs from 'dayjs'
 import s from './Bill.module.scss'
 import {deleteBill} from '@/api/bill'
-import {useContext, useState} from 'react'
+import {useContext} from 'react'
 import {HomeContext} from '.'
+import {useNavigate} from 'react-router-dom'
 const rightActions: Action[] = [
   {
     key: 'changeType',
@@ -20,14 +21,21 @@ const rightActions: Action[] = [
   },
 ]
 
+const typeColor = (type: number) => {
+  return type === 1 ? '#35AA62' : '#EBAA2D'
+}
 interface Props {
   bill: BillType
 }
 export default function Bill({bill}: Props) {
   const homeContext = useContext(HomeContext)
-  const typeColor = (type: number) => {
-    return type === 1 ? '#35AA62' : '#EBAA2D'
-  }
+  const navigate = useNavigate()
+  /**
+   *
+   * 侧滑动作
+   * @param action
+   * @param e
+   */
   const onAction = async (action: Action, e: React.MouseEvent) => {
     if (action.key === 'delete') {
       console.log('delete')
@@ -37,8 +45,7 @@ export default function Bill({bill}: Props) {
           await deleteBill(bill.id)
           homeContext.refresh()
           Toast.show({
-            icon: 'success',
-            content: '删除',
+            content: '删除成功',
           })
         },
       })
@@ -46,10 +53,15 @@ export default function Bill({bill}: Props) {
       console.log('changeType')
     }
   }
+
+  // 跳转账单详情
+  const goDetail = (id: string) => {
+    navigate(`/detail/${id}`)
+  }
   return (
     <SwipeAction key={bill.id} rightActions={rightActions} onAction={onAction}>
-      <div className={s.bill}>
-        <SvgIcon icon='xuexi' color={typeColor(bill.type)}></SvgIcon>
+      <div className={s.bill} onClick={() => goDetail(bill.id)}>
+        <SvgIcon icon='xuexi' color={typeColor(bill.type)} size={30}></SvgIcon>
         <div className={s.right}>
           <div className={s.top}>
             <span>{bill.tag_name}</span>

@@ -62,7 +62,6 @@ export default function Home() {
    * 获取账单列表
    */
   const getBillList = async () => {
-    let loadingToast: ToastHandler | undefined
     const params: ListBillDto = {
       date,
       pageInfo: {page, page_size: 10},
@@ -70,17 +69,10 @@ export default function Home() {
     if (currentSelect.id !== 'all') {
       params.tag_id = currentSelect.id
     }
-    if (page === 1) {
-      loadingToast = Toast.show({
-        icon: 'loading',
-        content: '加载中…',
-        duration: 0,
-      })
-    }
+
     const {
       data: {list, total_page, total_expense, total_income},
     } = await fetchBillList(params)
-    loadingToast!.close()
     if (page === 1) {
       setOneDayBills(list)
     } else {

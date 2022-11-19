@@ -4,6 +4,7 @@ const Home = lazy(() => import('@/pages/home'))
 const Data = lazy(() => import('@/pages/data'))
 const User = lazy(() => import('@/pages/user'))
 const Login = lazy(() => import('@/pages/login'))
+const Detail = lazy(() => import('@/pages/detail'))
 
 const routes = [
   {
@@ -27,6 +28,14 @@ const routes = [
     component: User,
     meta: {
       title: '我的',
+      needLogin: true,
+    },
+  },
+  {
+    path: '/detail/:id',
+    component: Detail,
+    meta: {
+      title: '账单详情',
       needLogin: true,
     },
   },
