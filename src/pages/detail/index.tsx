@@ -4,12 +4,15 @@ import {deleteBill, getBill} from '@/api/bill'
 import {getTag} from '@/api/tag'
 import Header from '@/components/header'
 import SvgIcon from '@/components/svgIcon'
-import {useEffect, useState} from 'react'
+import {ForwardedRef, useEffect, useRef, useState} from 'react'
 import {useLocation, useNavigate} from 'react-router-dom'
 import cx from 'classnames'
 import s from './index.module.scss'
 import dayjs from 'dayjs'
 import {Dialog, Divider, Toast} from 'antd-mobile'
+import AddBillPopup, {
+  AddBillPopupExpose as EditBillPopupExpose,
+} from '../home/AddBillPopup'
 
 export default function Detail() {
   const navigate = useNavigate()
@@ -18,6 +21,8 @@ export default function Detail() {
 
   const [bill, setBill] = useState<Bill>()
   const [tag, setTag] = useState<Tag>()
+
+  const editBillPopupRef = useRef<EditBillPopupExpose>()
 
   /**
    * 获取订单详情
@@ -38,12 +43,12 @@ export default function Detail() {
     setTag(res.data)
   }
 
-  const fetch = async () => {
+  const getDetail = async () => {
     const tag_id = await fetchBillDetail(id)
     await fetchTagDetail(tag_id)
   }
   useEffect(() => {
-    fetch()
+    getDetail()
   }, [])
 
   const onDelete = () => {
@@ -100,12 +105,23 @@ export default function Detail() {
             删除
           </span>
 
-          <span>
+          <span
+            onClick={() => {
+              setBill({...bill})
+              editBillPopupRef.current?.show()
+            }}
+          >
             <SvgIcon icon='tianjia' />
             编辑
           </span>
         </div>
       </div>
+
+      <AddBillPopup
+        ref={editBillPopupRef as ForwardedRef<EditBillPopupExpose>}
+        detail={bill}
+        refresh={getDetail}
+      />
     </div>
   )
 }

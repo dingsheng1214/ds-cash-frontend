@@ -12,10 +12,11 @@ import s from './AddBillPopup.module.scss'
 import cx from 'classnames'
 import DatePopup, {DatePopupExpose} from './DatePopup'
 import dayjs from 'dayjs'
-import useTag from './useTag'
 import {Tag} from '#/api'
 import SvgIcon from '@/components/svgIcon'
-import {createBill} from '@/api/bill'
+import {createBill, updateBill} from '@/api/bill'
+import {Bill} from '#/global'
+import {fetchTagList} from '@/api/tag'
 
 type Type = 1 | 2
 export type AddBillPopupExpose = {
@@ -24,20 +25,61 @@ export type AddBillPopupExpose = {
 }
 interface Props {
   refresh: () => void
+  detail?: Bill
 }
 const AddBillPopup = forwardRef(
-  ({refresh}: Props, ref: ForwardedRef<AddBillPopupExpose>) => {
-    console.log('AddBillPopup')
+  ({refresh, detail}: Props, ref: ForwardedRef<AddBillPopupExpose>) => {
+    // 传递 detail 则为编辑模式
+    const id = detail && detail.id
 
     const [show, setShow] = useState(false) // 控制显示隐藏
+
     const [type, setType] = useState<Type>(1) // 支出或收入类型
     const [date, setDate] = useState(new Date()) // 当前筛选时间
-    const [tag, setTag] = useState<Tag>({id: ''})
     const [amount, setAmount] = useState('')
     const [remark, setRemark] = useState('') // 备注
+    const [tag, setTag] = useState<Tag>()
+
     const [showRemark, setShowRemark] = useState(false) // 备注输入框展示控制
     const datePopupRef = useRef<DatePopupExpose>()
-    const {expense, income} = useTag(show)
+
+    const [expense, setExpense] = useState<Tag[]>([]) // 支出类型标签
+    const [income, setIncome] = useState<Tag[]>([]) // 收入类型标签
+
+    useEffect(() => {
+      ;(async () => {
+        if (show) {
+          const {data} = await fetchTagList()
+          const _expense = data.filter((i) => i.type === 1)
+          const _income = data.filter((i) => i.type === 2)
+          setExpense(_expense)
+          setIncome(_income)
+          if (!id) {
+            console.log(111)
+
+            setTag(_expense[0])
+          }
+        }
+      })()
+    }, [show])
+
+    useEffect(() => {
+      if (detail?.id) {
+        console.log(333)
+
+        const {type, tag_id, tag_name, remark, amount, date} = detail
+        setType(type)
+        setTag({id: tag_id, name: tag_name})
+        setRemark(remark)
+        setAmount(amount)
+        setDate(new Date(date))
+      }
+    }, [detail])
+
+    useEffect(() => {
+      console.log(222)
+      setTag(type === 1 ? expense[0] : income[0])
+    }, [type])
 
     if (ref) {
       ;(ref as MutableRefObject<AddBillPopupExpose>).current = {
@@ -48,23 +90,17 @@ const AddBillPopup = forwardRef(
       }
     }
 
-    useEffect(() => {
-      if (type === 1) setTag(expense[0])
-      if (type === 2) setTag(income[0])
-    }, [expense, type])
-
     const reset = () => {
+      setShow(false)
+      if (id) return
       setAmount('')
       setDate(new Date())
       setType(1)
       setTag({id: ''})
       setRemark('')
-      setShow(false)
     }
     const actions = {
       onClose: () => {
-        console.log('close')
-
         reset()
       },
       onInput: (key: string) => {
@@ -98,14 +134,19 @@ const AddBillPopup = forwardRef(
         if (!amount.length) {
           Toast.show('请输入具体金额')
         } else {
-          await createBill({
+          const params = {
             type,
             amount: Number(amount),
-            date: dayjs(date).format('YYYY-MM-DD hh:mm:ss'),
             remark,
-            tag_id: tag.id,
-            tag_name: tag.name!,
-          })
+            tag_id: tag!.id,
+            tag_name: tag?.name || '',
+            date: dayjs(date).format('YYYY-MM-DD hh:mm:ss'),
+          }
+          if (id) {
+            await updateBill({id, ...params})
+          } else {
+            await createBill(params)
+          }
           reset()
           refresh()
         }

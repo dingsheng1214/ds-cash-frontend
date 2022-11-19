@@ -1,5 +1,5 @@
 import request from '@/utils/axios'
-import {ListBillDto, ListBillBo, CreateBillDto} from '#/api'
+import {ListBillDto, ListBillBo, CreateBillDto, UpdateBillDto} from '#/api'
 import {Bill} from '#/global'
 
 export function fetchBillList(data: ListBillDto) {
@@ -16,4 +16,8 @@ export function deleteBill(id: string) {
 
 export function getBill(id: string) {
   return request.get<Bill>(`/bill/${id}`)
+}
+
+export function updateBill(data: UpdateBillDto) {
+  return request.post('/bill/update', data)
 }

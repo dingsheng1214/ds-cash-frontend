@@ -1,3 +1,4 @@
+import {CreateBillDto} from './api'
 import {OneDayBills} from './global'
 
 export interface LoginDto {
@@ -48,3 +49,5 @@ export interface CreateBillDto {
   date: string
   remark?: string
 }
+
+export type UpdateBillDto = {id: string} & CreateBillDto
