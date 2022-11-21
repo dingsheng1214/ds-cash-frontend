@@ -61,7 +61,11 @@ export default function Bill({bill}: Props) {
   return (
     <SwipeAction key={bill.id} rightActions={rightActions} onAction={onAction}>
       <div className={s.bill} onClick={() => goDetail(bill.id)}>
-        <SvgIcon icon='xuexi' color={typeColor(bill.type)} size={30}></SvgIcon>
+        <SvgIcon
+          icon={bill.tag_icon}
+          color={typeColor(bill.type)}
+          size={30}
+        ></SvgIcon>
         <div className={s.right}>
           <div className={s.top}>
             <span>{bill.tag_name}</span>

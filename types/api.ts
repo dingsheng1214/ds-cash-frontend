@@ -1,4 +1,3 @@
-import {CreateBillDto} from './api'
 import {OneDayBills} from './global'
 
 export interface LoginDto {
@@ -45,7 +44,6 @@ export interface CreateBillDto {
   type: 1 | 2
   amount: number
   tag_id: string
-  tag_name: string
   date: string
   remark?: string
 }

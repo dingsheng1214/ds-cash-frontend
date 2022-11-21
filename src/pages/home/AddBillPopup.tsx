@@ -67,9 +67,9 @@ const AddBillPopup = forwardRef(
       if (detail?.id) {
         console.log(333)
 
-        const {type, tag_id, tag_name, remark, amount, date} = detail
+        const {type, tag_id, remark, amount, date} = detail
         setType(type)
-        setTag({id: tag_id, name: tag_name})
+        setTag({id: tag_id})
         setRemark(remark)
         setAmount(amount)
         setDate(new Date(date))
@@ -139,7 +139,6 @@ const AddBillPopup = forwardRef(
             amount: Number(amount),
             remark,
             tag_id: tag!.id,
-            tag_name: tag?.name || '',
             date: dayjs(date).format('YYYY-MM-DD hh:mm:ss'),
           }
           if (id) {
