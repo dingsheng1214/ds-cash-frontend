@@ -21,8 +21,9 @@ import {CanvasRenderer} from 'echarts/renderers'
 import {makeupBill} from '@/api/bill'
 import {MakeupBillBo} from '#/api'
 import SvgIcon from '@/components/svgIcon'
-import {ProgressBar} from 'antd-mobile'
-import {ArrowsAltOutline, RightOutline} from 'antd-mobile-icons'
+import {Divider, ProgressBar} from 'antd-mobile'
+import {RightOutline} from 'antd-mobile-icons'
+import {useNavigate} from 'react-router-dom'
 
 // 注册必须的组件
 echarts.use([
@@ -70,6 +71,7 @@ const calcColor = (type: 1 | 2, index: number, data: any[]) => {
 
 export default function Makeup({type, date, setTotal}: Props) {
   const [list, setList] = useState<MakeupBillBo[]>([])
+  const navigate = useNavigate()
   /**
    * 获取 指定 type及date下各类标签所占比重
    */
@@ -107,7 +109,7 @@ export default function Makeup({type, date, setTotal}: Props) {
       <div id='chart' className={s.chart}></div>
       <div className={s.list}>
         {list.map((item) => (
-          <div className={s.item}>
+          <div className={s.item} key={item.tag_id}>
             <SvgIcon
               icon={item.tag_icon}
               size={25}
@@ -118,11 +120,11 @@ export default function Makeup({type, date, setTotal}: Props) {
               className={s.progress}
               percent={(item.total / list[0].total) * 100}
               style={{
-                '--fill-color': 'var(--adm-color-success)',
+                '--fill-color': type === 1 ? '#35AA62' : '#EBAA2D',
                 '--track-width': '4px',
               }}
             />
-            <span className={s.total}>
+            <span className={s.total} onClick={() => navigate('/rank')}>
               ¥
               {Number(item.total) > 10000
                 ? `${Number(item.total / 10000).toFixed(2)}万`
@@ -132,6 +134,7 @@ export default function Makeup({type, date, setTotal}: Props) {
           </div>
         ))}
       </div>
+      <Divider />
     </div>
   )
 }

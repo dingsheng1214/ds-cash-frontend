@@ -5,6 +5,7 @@ const Data = lazy(() => import('@/pages/data'))
 const User = lazy(() => import('@/pages/user'))
 const Login = lazy(() => import('@/pages/login'))
 const Detail = lazy(() => import('@/pages/detail'))
+const Rank = lazy(() => import('@/components/rank'))
 
 const routes = [
   {
@@ -45,6 +46,14 @@ const routes = [
     meta: {
       title: '登录',
       needLogin: false,
+    },
+  },
+  {
+    path: '/rank',
+    component: Rank,
+    meta: {
+      title: '排行',
+      needLogin: true,
     },
   },
 ]

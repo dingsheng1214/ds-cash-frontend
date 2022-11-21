@@ -7,9 +7,9 @@ import {ArrowsAltOutline} from 'antd-mobile-icons'
  * 内页公共头部组件
  */
 interface Props {
-  title: string
+  title?: string
 }
-export default function Header({title}: Props) {
+export default function Header({title = ''}: Props) {
   const navigateTo = useNavigate()
   return (
     <div className={s['header-warp']}>

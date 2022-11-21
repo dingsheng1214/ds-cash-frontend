@@ -1,0 +1,101 @@
+.container {
+  .header {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .top {
+      color: #6c6c6c;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .amount {
+      margin-top: 20px;
+      span {
+        font-size: 22px;
+        font-weight: bold;
+        vertical-align: top;
+        margin-right: 5px;
+      }
+    }
+  }
+  .divider {
+    height: 8px;
+    width: 100%;
+    background-color: #f9f9f9;
+  }
+
+  .body {
+    padding: 20px 0 0 20px;
+    .filter {
+      font-size: 14px;
+      span {
+        background-color: #f9f9f9;
+        color: #9f9f9f;
+        padding: 5px 10px;
+        margin-right: 5px;
+        border-radius: 2px;
+      }
+
+      &.expense {
+        .active {
+          background-color: #e6f5ed;
+          color: #35aa62;
+        }
+      }
+
+      &.income{
+        .active {
+          background-color: #fcf7e6;
+          color: #ebaa2d;
+        }
+      }
+    }
+  }
+ .list {
+    .item {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: nowrap;
+      .left {
+        width: 30px;
+        flex: 0;
+        flex-basis: 30px;
+        margin-right: 10px;
+      }
+      .right {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        margin-right: 20px;
+        div:nth-of-type(1) {
+          font-size: 16px;
+          font-weight: bold;
+          display: flex;
+          justify-content: space-between;
+        }
+        div:nth-of-type(2) {
+          color: #a3a3a3;
+          margin-top: 10px;
+          font-size: 12px;
+          display: flex;
+          justify-content: space-between;
+          span:nth-of-type(1) {
+            flex: 0;
+            flex-basis: 50%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+          span:nth-of-type(2) {
+            text-align: right;
+            flex: 0;
+            flex-basis: 50%;
+          }
+        }
+      }
+    }
+  }
+
+}
