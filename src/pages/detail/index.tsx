@@ -107,7 +107,7 @@ export default function Detail() {
 
           <span
             onClick={() => {
-              setBill({...bill})
+              setBill({...bill!})
               editBillPopupRef.current?.show()
             }}
           >

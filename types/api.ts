@@ -51,3 +51,14 @@ export interface CreateBillDto {
 }
 
 export type UpdateBillDto = {id: string} & CreateBillDto
+
+export type MakeupBillDto = {
+  type: 1 | 2
+  date: string
+}
+export type MakeupBillBo = {
+  tag_id: string
+  tag_name: string
+  tag_icon: string
+  total: number
+}
