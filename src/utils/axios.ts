@@ -6,7 +6,7 @@ const MODE = import.meta.env.MODE
 
 // 默认配置
 axios.defaults.baseURL =
-  MODE === 'development' ? '/api' : 'http://119.3.214.158/ds-cash/'
+  MODE === 'development' ? '/api' : 'http://119.3.214.158/ds-cash/api'
 axios.defaults.withCredentials = true
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
