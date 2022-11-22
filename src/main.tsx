@@ -4,13 +4,13 @@ import App from './App'
 import 'amfe-flexible'
 import '@/assets/scss/index.scss'
 import '@/assets/js/iconfont.js'
-import {BrowserRouter} from 'react-router-dom'
+import {HashRouter as Router} from 'react-router-dom'
 const container = document.getElementById('root')
 const root = createRoot(container!)
 root.render(
   <Suspense>
-    <BrowserRouter>
+    <Router>
       <App />
-    </BrowserRouter>
+    </Router>
   </Suspense>
 )
