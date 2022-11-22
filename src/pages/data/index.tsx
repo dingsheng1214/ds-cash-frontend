@@ -5,6 +5,7 @@ import {CalendarOutline} from 'antd-mobile-icons'
 import DatePopup, {DatePopupExpose} from '../home/DatePopup'
 import dayjs from 'dayjs'
 import Makeup from './Makeup'
+import DailyCompare from './DailyCompare'
 
 const dateFormate = 'YYYY-MM'
 export default function Data() {
@@ -59,6 +60,8 @@ export default function Data() {
       {/* body */}
       <div className={s.body}>
         <Makeup type={type} date={date} setTotal={setTotal} />
+
+        <DailyCompare type={type} date={date} />
       </div>
 
       <DatePopup

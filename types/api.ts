@@ -1,4 +1,4 @@
-import {OneDayBills} from './global'
+import {Bill, OneDayBills} from './global'
 
 export interface LoginDto {
   username: string
@@ -59,4 +59,17 @@ export type MakeupBillBo = {
   tag_name: string
   tag_icon: string
   total: number
+}
+
+export interface RankBillDto {
+  type: 1 | 2
+  tag_id?: string
+  orderBy: 'amount' | 'date'
+  date: string
+  pageInfo: pageInfo
+}
+export interface RankBillBo {
+  total_amount: number
+  total_page: number
+  list: Bill[]
 }

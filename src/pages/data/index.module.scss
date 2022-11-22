@@ -1,4 +1,6 @@
 .container {
+  height: calc(100vh - 50px);
+  margin-bottom: 50px;
   .header {
     height: 200px;
     color: #ffffff;
@@ -66,6 +68,5 @@
   }
 
   .body {
-
   }
 }

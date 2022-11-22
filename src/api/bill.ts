@@ -6,6 +6,8 @@ import {
   UpdateBillDto,
   MakeupBillDto,
   MakeupBillBo,
+  RankBillDto,
+  RankBillBo,
 } from '#/api'
 import {Bill} from '#/global'
 
@@ -31,4 +33,15 @@ export function updateBill(data: UpdateBillDto) {
 
 export function makeupBill(data: MakeupBillDto) {
   return request.post<MakeupBillBo[]>('/bill/makeup', data)
+}
+
+export function rankBill(data: RankBillDto) {
+  return request.post<RankBillBo>('/bill/rank', data)
+}
+
+export function dailyCompare(data: MakeupBillDto) {
+  return request.post<{date: string; total: number}[]>(
+    '/bill/dailyCompare',
+    data
+  )
 }

@@ -102,6 +102,10 @@ export default function Makeup({type, date, setTotal}: Props) {
     }
   }, [type, date])
 
+  const goRank = ({id, name}: {id: string; name: string}) => {
+    const url = `/rank?date=${date}&type=${type}&tag_id=${id}&tag_name=${name}`
+    navigate(url)
+  }
   return (
     <div className={s.container}>
       {/* 这是用于放置饼图的 DOM 节点 */}
@@ -122,9 +126,13 @@ export default function Makeup({type, date, setTotal}: Props) {
               style={{
                 '--fill-color': type === 1 ? '#35AA62' : '#EBAA2D',
                 '--track-width': '4px',
+                '--track-color': '#fff',
               }}
             />
-            <span className={s.total} onClick={() => navigate('/rank')}>
+            <span
+              className={s.total}
+              onClick={() => goRank({id: item.tag_id, name: item.tag_name})}
+            >
               ¥
               {Number(item.total) > 10000
                 ? `${Number(item.total / 10000).toFixed(2)}万`
