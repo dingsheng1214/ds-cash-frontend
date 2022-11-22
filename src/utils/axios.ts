@@ -5,7 +5,8 @@ import {Toast} from 'antd-mobile'
 const MODE = import.meta.env.MODE
 
 // 默认配置
-axios.defaults.baseURL = MODE === 'development' ? '/api' : '生产环境接口地址'
+axios.defaults.baseURL =
+  MODE === 'development' ? '/api' : 'http://119.3.214.158/ds-cash/'
 axios.defaults.withCredentials = true
 axios.defaults.headers.post['Content-Type'] = 'application/json'
 
