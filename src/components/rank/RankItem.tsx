@@ -54,7 +54,7 @@ export default function RankItem({bill, refresh}: Props) {
           </div>
           <div>
             <span>{bill.remark}</span>
-            <span>{dayjs(bill.updated_time).format('MM月DD日 hh:mm')}</span>
+            <span>{dayjs(bill.date).format('MM月DD日 hh:mm')}</span>
           </div>
         </div>
       </div>

@@ -78,9 +78,7 @@ export default function Bill({bill}: Props) {
             )}
           </div>
           <div className={s.bottom}>
-            <span className={s.time}>
-              {dayjs(bill.updated_time).format('hh:ss')}
-            </span>
+            <span className={s.time}>{dayjs(bill.date).format('hh:ss')}</span>
             {bill.remark ? (
               <>
                 <Divider direction='vertical' />

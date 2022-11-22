@@ -88,7 +88,7 @@ export default function Detail() {
         <div className={s.info}>
           <div className={s.time}>
             <span>记录时间</span>
-            <span>{dayjs(bill?.updated_time).format('YYYY-MM-DD HH:mm')}</span>
+            <span>{dayjs(bill?.date).format('YYYY-MM-DD HH:mm')}</span>
           </div>
           <div className={s.remark}>
             <span>备注</span>
