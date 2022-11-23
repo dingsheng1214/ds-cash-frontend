@@ -95,7 +95,7 @@ export default function Login() {
         <Form
           form={form}
           initialValues={{
-            username: 'aaa',
+            username: '',
             password: '',
           }}
           onFinish={onFinish}
