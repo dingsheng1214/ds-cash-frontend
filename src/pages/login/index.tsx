@@ -48,11 +48,13 @@ export default function Login() {
       Toast.show({icon: 'success', content: '注册成功'})
       trigerType()
     }
-    console.log(res)
   }
 
   const trigerType = () => {
-    form.resetFields()
+    form.setFields([
+      {name: 'username', value: '', errors: undefined},
+      {name: 'password', value: '', errors: undefined},
+    ])
     if (type === 'login') {
       setType('register')
     } else {
@@ -92,6 +94,10 @@ export default function Login() {
       <div className={style['login-form']}>
         <Form
           form={form}
+          initialValues={{
+            username: 'aaa',
+            password: '',
+          }}
           onFinish={onFinish}
           layout='horizontal'
           mode='card'
@@ -114,20 +120,11 @@ export default function Login() {
             label={<LockOutline className={style['icon-lable']} />}
             rules={[{required: true, message: '密码不能为空!'}]}
           >
-            <div className={style.password}>
-              <Input
-                className={style.input}
-                placeholder='请输入密码'
-                type={visible ? 'text' : 'password'}
-              />
-              <div className={style.eye}>
-                {!visible ? (
-                  <EyeInvisibleOutline onClick={() => setVisible(true)} />
-                ) : (
-                  <EyeOutline onClick={() => setVisible(false)} />
-                )}
-              </div>
-            </div>
+            <Input
+              className={style.input}
+              placeholder='请输入密码'
+              type={'password'}
+            />
           </Form.Item>
         </Form>
       </div>
